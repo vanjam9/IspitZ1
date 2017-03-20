@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">IspitZ</string>
+    <string name="activity_first_toolbar_title" />
+    <string name="activity_settings_name" />
+    <string name="mName" />
+    <string name="activity_main_toolbar_title" />
+    <string name="fragment_detal_action_delete" />
+    <string name="fragment_master_action_create" />
+    <string name="fragment_detal_action_update" />
+    <string name="dialog_about_title" />
+    <string name="dialog_about_yes" />
+    <string name="dialog_about_no" />
+    <string name="surname" />
+</resources>
