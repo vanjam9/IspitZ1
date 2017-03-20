@@ -32,7 +32,7 @@ import java.util.List;
 public class SecondActivity extends AppCompatActivity {
 
     private DatabaseHelper databaseHelper;
-    private Lkontakti lkontakti;
+    private Lkontakti l;
 
     private EditText name;
     private EditText surname;
@@ -59,15 +59,15 @@ public class SecondActivity extends AppCompatActivity {
         int key = getIntent().getExtras().getInt(MainActivity.key);
 
         try {
-            Lkontakti o = getDatabaseHelper().getGlumcibDao().queryForId(key);
+             l = getDatabaseHelper().getGlumcibDao().queryForId(key);
 
             name = (EditText) findViewById(R.id.name);
             surname = (EditText) findViewById(R.id.surname);
             adress=(EditText)findViewById(R.id.adress);
 
-            name.setText(o.getName());
-            surname.setText(o.getSurname());
-adress.setText(o.getAdress());
+            name.setText(l.getName());
+            surname.setText(l.getSurname());
+adress.setText(l.getAdress());
 
     }catch (SQLException e) {
             e.printStackTrace();
@@ -81,7 +81,7 @@ adress.setText(o.getAdress());
 
             List<Kontakt> list = getDatabaseHelper().getKontaktDao().queryBuilder()
                     .where()
-                    .eq(Kontakt.FIELD_NAME_USER, lkontakti.getId())
+                    .eq(Kontakt.FIELD_NAME_USER, l.getId())
                     .query();
 
             ListAdapter adapter = new ArrayAdapter<>(this, R.layout.list_item, list);
@@ -114,20 +114,18 @@ adress.setText(o.getAdress());
                 final Dialog dialog = new Dialog(this);
                 dialog.setContentView(R.layout.priprema_add_telefon);
 
-                Button add = (Button) dialog.findViewById(R.id.add_movie);
+                Button add = (Button) dialog.findViewById(R.id.add_telefon);
                 add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EditText name = (EditText) dialog.findViewById(R.id.movie_name);
-                        EditText genre = (EditText) dialog.findViewById(R.id.movie_genre);
-                        EditText year = (EditText) dialog.findViewById(R.id.movie_year);
+                        EditText telefon = (EditText) dialog.findViewById(R.id.telefoni_kontakta);
 
-                        Movie m = new Movie();
+                        Kontakt m = new Kontakt();
                         m.setmName(name.getText().toString());
 
 
                         try {
-                            getDatabaseHelper().getMovieDao().create(m);
+                            getDatabaseHelper().getKontaktDao().create(m);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
@@ -142,17 +140,20 @@ adress.setText(o.getAdress());
                 dialog.show();
 
                 break;
+
+
+
             case R.id.action_update:
                 //POKUPITE INFORMACIJE SA EDIT POLJA
 
-                glumcib.setName(name.getText().toString());
-                glumcib.setDescription(description.getText().toString());
+                l.setName(name.getText().toString());
+              l.setSurname(surname.getText().toString());
 
 
                 try {
-                    getDatabaseHelper().getGlumcibDao().update(glumcib);
+                    getDatabaseHelper().getGlumcibDao().update(l);
 
-                    Toast.makeText(this,("Actor detail updated"),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,("Telephone detail updated"),Toast.LENGTH_SHORT).show();
 
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -161,7 +162,7 @@ adress.setText(o.getAdress());
                 break;
             case R.id.action_delete:
                 try {
-                    getDatabaseHelper().getGlumcibDao().delete(glumcib);
+                    getDatabaseHelper().getGlumcibDao().delete(l);
 
 
                     finish(); //moramo pozvati da bi se vratili na prethodnu aktivnost
@@ -176,7 +177,30 @@ adress.setText(o.getAdress());
 
 
 
+    private void refresh() {
+        ListView listview = (ListView) findViewById(R.id.listaKontakata);
 
+        if (listview != null){
+            ArrayAdapter<Kontakt> adapter = (ArrayAdapter<Kontakt>) listview.getAdapter();
+
+            if(adapter!= null)
+            {
+                try {
+                    adapter.clear();
+                    List<Kontakt> list = getDatabaseHelper().getKontaktDao().queryBuilder()
+                            .where()
+                            .eq(Kontakt.FIELD_NAME_USER, l.getId())
+                            .query();
+
+                    adapter.addAll(list);
+
+                    adapter.notifyDataSetChanged();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
 
 
