@@ -61,13 +61,13 @@ public class SecondActivity extends AppCompatActivity {
         try {
              l = getDatabaseHelper().getGlumcibDao().queryForId(key);
 
-            name = (EditText) findViewById(R.id.name);
+            name = (EditText) findViewById(R.id.Name);
             surname = (EditText) findViewById(R.id.surname);
             adress=(EditText)findViewById(R.id.adress);
 
             name.setText(l.getName());
             surname.setText(l.getSurname());
-adress.setText(l.getAdress());
+            adress.setText(l.getAdress());
 
     }catch (SQLException e) {
             e.printStackTrace();
